@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}{{ title }} - CMMS{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10 offset-md-1"> <!-- Wider form area -->
+            <h2>{{ legend }}</h2>
+            <hr>
+            <form method="POST" action=""> <!-- Action URL handled by Flask -->
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ wtf.form_field(form.name) }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ wtf.form_field(form.tag_number) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{ wtf.form_field(form.description, rows=3) }}
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ wtf.form_field(form.asset_id_tag) }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ wtf.form_field(form.status) }}
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        {{ wtf.form_field(form.document_link) }}
+                    </div>
+
+                    <hr>
+                    <h5>Details & Classification</h5>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ wtf.form_field(form.location_id) }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ wtf.form_field(form.unit_id) }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ wtf.form_field(form.asset_priority_id) }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ wtf.form_field(form.asset_type_id) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        {{ form.strategies.label(class="form-control-label") }}
+                        {{ form.strategies(class="form-control select2-multiple", multiple="multiple", style="width: 100%;") }}
+                        {% if form.strategies.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.strategies.errors %}<span>{{ error }}</span>{% endfor %}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">Select one or more maintenance strategies.</small>
+                    </div>
+
+                </fieldset>
+                <div class="form-group mt-4">
+                    {{ form.submit(class="btn btn-primary") }}
+                    {% if asset %}
+                        <a href="{{ url_for('view_asset', asset_id=asset.id) }}" class="btn btn-secondary">Cancel</a>
+                    {% else %}
+                        <a href="{{ url_for('assets') }}" class="btn btn-secondary">Cancel</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+{{ super() }}
+<!-- For enhanced multi-select, if you choose to use Select2 -->
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> -->
+<!-- <script>
+$(document).ready(function() {
+    $('.select2-multiple').select2({
+        placeholder: "Select strategies",
+        allowClear: true
+    });
+});
+</script> -->
+{% endblock %}
+{% endblock %}

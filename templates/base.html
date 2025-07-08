@@ -26,7 +26,19 @@
             </li>
             {% if current_user.role == 'admin' %}
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('admin_users') }}">User Management</a>
+              <a class="nav-link" href="{{ url_for('admin_users') }}">Users</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="adminSettingsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Asset Settings
+              </a>
+              <div class="dropdown-menu" aria-labelledby="adminSettingsDropdown">
+                <a class="dropdown-item" href="{{ url_for('admin_locations') }}">Locations</a>
+                <a class="dropdown-item" href="{{ url_for('admin_units') }}">Units</a>
+                <a class="dropdown-item" href="{{ url_for('admin_asset_priorities') }}">Asset Priorities</a>
+                <a class="dropdown-item" href="{{ url_for('admin_asset_types') }}">Asset Types</a>
+                <a class="dropdown-item" href="{{ url_for('admin_maintenance_strategies') }}">Maintenance Strategies</a>
+              </div>
             </li>
             {% endif %}
           {% endif %}

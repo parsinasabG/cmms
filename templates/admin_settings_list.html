@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}{{ title }} - CMMS Admin{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <h2>{{ title }}</h2>
+        </div>
+        <div class="col-md-4 text-right">
+            <!-- Button to trigger modal for adding new item might be better -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Add New {{ item_type }}</h4>
+            <form method="POST" action="{{ url_for(endpoint_base) }}">
+                {{ form.hidden_tag() }}
+                {{ wtf.form_field(form.name) }}
+                {% if form.description %} <!-- For Maintenance Strategies -->
+                    {{ wtf.form_field(form.description) }}
+                {% endif %}
+                {{ wtf.form_field(form.submit, class="btn btn-success mt-2") }}
+            </form>
+        </div>
+
+        <div class="col-md-8">
+            <h4>Existing {{ item_type }}s</h4>
+            {% if items %}
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        {% if items[0] and items[0].description is defined %}
+                        <th>Description</th>
+                        {% endif %}
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.name }}</td>
+                        {% if item.description is defined %}
+                        <td>{{ item.description | truncate(50) if item.description else '' }}</td>
+                        {% endif %}
+                        <td>
+                            <a href="{{ url_for(endpoint_base + '_edit', item_id=item.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                            <form action="{{ url_for(endpoint_base + '_delete', item_id=item.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this {{ item_type }}?');">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No {{ item_type.lower() }}s found. Add some using the form on the left.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - CMMS{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3>Asset: {{ asset.name }} ({{ asset.tag_number }})</h3>
+            <div>
+                <a href="{{ url_for('edit_asset', asset_id=asset.id) }}" class="btn btn-primary">Edit Asset</a>
+                <a href="{{ url_for('assets') }}" class="btn btn-secondary">Back to Assets List</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5>Details</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">Asset Name:</dt>
+                        <dd class="col-sm-8">{{ asset.name }}</dd>
+
+                        <dt class="col-sm-4">Tag Number:</dt>
+                        <dd class="col-sm-8">{{ asset.tag_number }}</dd>
+
+                        <dt class="col-sm-4">Description:</dt>
+                        <dd class="col-sm-8">{{ asset.description | nl2br if asset.description else 'N/A' }}</dd>
+
+                        <dt class="col-sm-4">Physical ID Tag:</dt>
+                        <dd class="col-sm-8">{{ asset.asset_id_tag if asset.asset_id_tag else 'N/A' }}</dd>
+
+                        <dt class="col-sm-4">Status:</dt>
+                        <dd class="col-sm-8">{{ asset.status if asset.status else 'N/A' }}</dd>
+
+                        <dt class="col-sm-4">Installation Date:</dt>
+                        <dd class="col-sm-8">{{ asset.installation_date.strftime('%Y-%m-%d') if asset.installation_date else 'N/A' }}</dd>
+
+                        <dt class="col-sm-4">Document Link:</dt>
+                        <dd class="col-sm-8">
+                            {% if asset.document_link %}
+                                <a href="{{ asset.document_link }}" target="_blank">{{ asset.document_link }}</a>
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <h5>Classification</h5>
+                    <p><strong>Location:</strong> {{ asset.location.name if asset.location else 'N/A' }}</p>
+                    <p><strong>Unit:</strong> {{ asset.unit.name if asset.unit else 'N/A' }}</p>
+                    <p><strong>Asset Priority:</strong> {{ asset.asset_priority.name if asset.asset_priority else 'N/A' }}</p>
+                    <p><strong>Asset Type:</strong> {{ asset.asset_type.name if asset.asset_type else 'N/A' }}</p>
+
+                    <h5 class="mt-3">Maintenance Strategies</h5>
+                    {% if asset.strategies.all() %}
+                        <ul>
+                        {% for strategy in asset.strategies %}
+                            <li>{{ strategy.name }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No specific maintenance strategies assigned.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <hr>
+            <!-- Related Work Orders (Placeholder) -->
+            <h4>Related Work Orders</h4>
+            {% if asset.work_orders %}
+                <ul class="list-group">
+                {% for wo in asset.work_orders %}
+                    <li class="list-group-item">
+                        <a href="{{ url_for('view_work_order', work_order_id=wo.id) }}">#{{ wo.id }}: {{ wo.title }}</a> (Status: {{ wo.status }})
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No work orders linked to this asset.</p>
+            {% endif %}
+
+            <hr>
+            <!-- Condition Monitoring Data (Placeholder) -->
+            <h4>Condition Monitoring History</h4>
+            {% if asset.condition_logs.all() %}
+                 <ul class="list-group">
+                {% for log in asset.condition_logs.order_by(ConditionMonitoring.timestamp.desc()).limit(5) %} <!-- Show last 5 -->
+                    <li class="list-group-item">
+                        {{ log.timestamp.strftime('%Y-%m-%d %H:%M') }}:
+                        Vibration: {{ log.vibration_level if log.vibration_level is not none else 'N/A' }},
+                        Oil: {{ log.oil_condition if log.oil_condition else 'N/A' }},
+                        Temp: {{ log.temperature if log.temperature is not none else 'N/A' }}
+                    </li>
+                {% endfor %}
+                 </ul>
+                 {% if asset.condition_logs.count() > 5 %}<small>Showing last 5 entries.</small>{% endif %}
+            {% else %}
+                <p>No condition monitoring data recorded for this asset.</p>
+            {% endif %}
+
+        </div>
+        <div class="card-footer text-muted">
+            Asset ID: {{ asset.id }}
+            <!-- Last updated: {{ asset.updated_at.strftime('%Y-%m-%d %H:%M') if asset.updated_at else 'N/A' }} -->
+        </div>
+    </div>
+</div>
+{% endblock %}
