@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}User Management - CMMS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4">User Management</h1>
+    <p>This page is for administrators to manage user accounts.</p>
+
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                    <a href="#" class="btn btn-sm btn-info">Edit</a> <!-- Placeholder for edit user -->
+                    <a href="#" class="btn btn-sm btn-danger">Delete</a> <!-- Placeholder for delete user -->
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">No users found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="#" class="btn btn-success">Add New User</a> <!-- Placeholder for add new user -->
+</div>
+{% endblock %}

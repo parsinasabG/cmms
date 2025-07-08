@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - CMMS{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3>Work Order #{{ work_order.id }}: {{ work_order.title }}</h3>
+            <div>
+                <a href="{{ url_for('edit_work_order', work_order_id=work_order.id) }}" class="btn btn-primary">Edit</a>
+                <a href="{{ url_for('work_orders') }}" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <p><strong>Description:</strong></p>
+                    <p>{{ work_order.description | nl2br if work_order.description else 'N/A' }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Status:</strong>
+                        {% if work_order.status == 'Open' %}
+                            <span class="badge badge-primary">{{ work_order.status }}</span>
+                        {% elif work_order.status == 'In Progress' %}
+                            <span class="badge badge-info">{{ work_order.status }}</span>
+                        {% elif work_order.status == 'Done' %}
+                             <span class="badge badge-success">{{ work_order.status }}</span>
+                        {% else %}
+                            <span class="badge badge-secondary">{{ work_order.status }}</span>
+                        {% endif %}
+                    </p>
+                    <p><strong>Priority:</strong>
+                        {% if work_order.priority == 'High' %}
+                            <span class="badge badge-danger">{{ work_order.priority }}</span>
+                        {% elif work_order.priority == 'Medium' %}
+                            <span class="badge badge-warning">{{ work_order.priority }}</span>
+                        {% else %}
+                            <span class="badge badge-info">{{ work_order.priority }}</span>
+                        {% endif %}
+                    </p>
+                    <p><strong>Asset:</strong> {{ work_order.asset.name if work_order.asset else 'N/A' }}</p>
+                    <p><strong>Assigned To:</strong> {{ work_order.assigned_to.username if work_order.assigned_to else 'Unassigned' }}</p>
+                    <p><strong>Created Date:</strong> {{ work_order.creation_date.strftime('%Y-%m-%d %H:%M') if work_order.creation_date else 'N/A' }}</p>
+                    <p><strong>Due Date:</strong> {{ work_order.due_date.strftime('%Y-%m-%d') if work_order.due_date else 'Not set' }}</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Attachments Section (Placeholder) -->
+            <h4>Attachments</h4>
+            {% if work_order.attachments %}
+                <p>Files: {{ work_order.attachments }}</p> <!-- Simple display for now -->
+                <!-- Later: Loop through actual files, provide download links -->
+            {% else %}
+                <p>No attachments for this work order.</p>
+            {% endif %}
+            <!-- Add file upload form here later if editing is allowed on this page -->
+
+
+            <hr>
+            <!-- Comments Section -->
+            <h4>Comments</h4>
+            {% for comment in work_order.comments.order_by(WorkOrderComment.timestamp.desc()).all() %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <p class="card-text">{{ comment.comment_text }}</p>
+                        <small class="text-muted">By {{ comment.user.username }} on {{ comment.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                    </div>
+                </div>
+            {% else %}
+                <p>No comments yet.</p>
+            {% endfor %}
+
+            <!-- Add Comment Form (Placeholder - will need a new form and route) -->
+            <form action="#" method="POST" class="mt-3">
+                <div class="form-group">
+                    <textarea name="comment_text" class="form-control" rows="3" placeholder="Add a comment..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-info">Add Comment</button>
+            </form>
+
+        </div>
+        <div class="card-footer text-muted">
+            Last updated: {{ work_order.creation_date.strftime('%Y-%m-%d %H:%M') }} <!-- This should be an 'updated_at' field ideally -->
+        </div>
+    </div>
+</div>
+{% endblock %}

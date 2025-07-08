@@ -1,0 +1,13 @@
+/* Custom CSS styles can go here */
+body {
+    font-family: sans-serif;
+}
+
+.dashboard-card {
+    margin-bottom: 20px;
+}
+
+.kpi-value {
+    font-size: 2em;
+    font-weight: bold;
+}

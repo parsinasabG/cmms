@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}{{ title }} - CMMS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="mt-4 mb-4">{{ legend }}</h2>
+            <form method="POST" action=""> <!-- Action URL is handled by Flask -->
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <div class="form-group">
+                        {{ form.title.label(class="form-control-label") }}
+                        {% if form.title.errors %}
+                            {{ form.title(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.title.errors %}<span>{{ error }}</span>{% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.title(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.description.label(class="form-control-label") }}
+                        {% if form.description.errors %}
+                            {{ form.description(class="form-control form-control-lg is-invalid", rows=5) }}
+                            <div class="invalid-feedback">
+                                {% for error in form.description.errors %}<span>{{ error }}</span>{% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.description(class="form-control form-control-lg", rows=5) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form.priority.label(class="form-control-label") }}
+                            {{ form.priority(class="form-control") }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form.status.label(class="form-control-label") }}
+                            {{ form.status(class="form-control") }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form.asset_id.label(class="form-control-label") }}
+                            {{ form.asset_id(class="form-control") }}
+                             {% if form.asset_id.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.asset_id.errors %}<span>{{ error }}</span>{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form.assigned_to_user_id.label(class="form-control-label") }}
+                            {{ form.assigned_to_user_id(class="form-control") }}
+                            {% if form.assigned_to_user_id.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.assigned_to_user_id.errors %}<span>{{ error }}</span>{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- Due Date field can be added here later -->
+                </fieldset>
+                <div class="form-group mt-4">
+                    {{ form.submit(class="btn btn-primary") }}
+                    {% if work_order %}
+                        <a href="{{ url_for('view_work_order', work_order_id=work_order.id) }}" class="btn btn-secondary">Cancel</a>
+                    {% else %}
+                        <a href="{{ url_for('work_orders') }}" class="btn btn-secondary">Cancel</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

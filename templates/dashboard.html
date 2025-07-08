@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - CMMS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4">Dashboard</h1>
+    <p>Welcome, {{ current_user.username }}!</p>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card dashboard-card">
+                <div class="card-header">
+                    Upcoming Work Orders
+                </div>
+                <div class="card-body">
+                    <!-- Calendar or list of upcoming work orders will go here -->
+                    <p>Calendar/List View - TBD</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card dashboard-card">
+                <div class="card-header">
+                    Asset Performance KPIs
+                </div>
+                <div class="card-body">
+                    <!-- KPIs like MTBF, MTTR will be displayed here -->
+                    <p>MTBF: <span class="kpi-value">--</span></p>
+                    <p>MTTR: <span class="kpi-value">--</span></p>
+                    <p>Downtime: <span class="kpi-value">--</span> hours</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card dashboard-card">
+                <div class="card-header">
+                    Real-time Condition Monitoring
+                </div>
+                <div class="card-body">
+                    <!-- Indicators for vibration, oil, etc. -->
+                    <p>Vibration Levels: Normal</p>
+                    <p>Oil Condition: Good</p>
+                    <p>Temperature: Stable</p>
+                    <!-- This will be dynamic later -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

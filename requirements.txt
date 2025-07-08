@@ -1,0 +1,9 @@
+Flask>=2.0
+Flask-SQLAlchemy>=2.5
+Flask-Login>=0.5
+Werkzeug>=2.0
+Flask-WTF>=1.0  # For forms
+WTForms[email]>=3.0 # For form validation, including email
+Flask-Bootstrap>=1.0 # For Bootstrap integration with WTForms
+# psycopg2-binary # For PostgreSQL, if you switch later (commented out)
+# mysqlclient # For MySQL, if you switch later (commented out)

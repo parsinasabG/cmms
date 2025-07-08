@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - CMMS{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+  <h1 class="display-4">Welcome to CMMS!</h1>
+  <p class="lead">Your Computerized Maintenance Management System.</p>
+  <hr class="my-4">
+  <p>Manage your assets, work orders, and maintenance schedules efficiently.</p>
+  {% if not current_user.is_authenticated %}
+  <a class="btn btn-primary btn-lg" href="{{ url_for('login') }}" role="button">Login</a>
+  <a class="btn btn-secondary btn-lg" href="{{ url_for('register') }}" role="button">Register</a>
+  {% else %}
+  <a class="btn btn-primary btn-lg" href="{{ url_for('dashboard') }}" role="button">Go to Dashboard</a>
+  {% endif %}
+</div>
+{% endblock %}
